@@ -1,0 +1,16 @@
+---
+- name: Create snapshot of target RDS instance
+  local_action: rds
+  args:
+    command: snapshot
+    # Target snapshot
+    snapshot: "db-{{ prefix }}-{{ app_name }}-{{ mode }}-{{ db_version }}-{{ lookup('pipe', 'date +%Y-%m-%d-%H-%M-%S') }}"
+    instance_name: "db-{{ prefix }}-{{ app_name }}-{{ mode }}-{{ db_version }}"
+    wait: yes
+    wait_timeout: 600
+    region: "{{ aws_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: rdsinstance
+  tags:
+    - rdscreatesnapshot
